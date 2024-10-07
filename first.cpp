@@ -34,6 +34,29 @@ void oops() {
         //隐患，访问局部变量，局部变量可能会随着}结束而回收或随着主线程退出而回收
         functhread.detach();    
 }
+//join用法
+void use_join(){
+    int some_local_state = 0;
+    func myfunc(some_local_state);
+    std::thread functhread(myfunc);
+    functhread.join();
+}
+
+//异常处理
+void catch_exception() {
+    int some_local_state = 0;
+    func myfunc(some_local_state);
+    std::thread  functhread{ myfunc };
+    try {
+        //本线程做一些事情,可能引发崩溃
+        std::this_thread::sleep_for(std::chrono::seconds(1));
+    }catch (std::exception& e) {
+        functhread.join();
+        throw;
+    }
+
+    functhread.join();
+}
 
 int main()
 {
@@ -67,7 +90,13 @@ int main()
     // detach 注意事项
     oops();
     //防止主线程退出过快，需要停顿一下，让子线程跑起来detach
-    std::this_thread::sleep_for(std::chrono::seconds(1));
+    //std::this_thread::sleep_for(std::chrono::seconds(1));
+
+    //join 用法
+    use_join();
+
+    //捕获异常
+    catch_exception();
 
     return 0;
 }
