@@ -57,6 +57,31 @@ void catch_exception() {
 
     functhread.join();
 }
+//线程守卫
+class thread_guard {
+private:
+    std::thread& _t;
+public:
+    explicit thread_guard(std::thread& t):_t(t){}
+    ~thread_guard() {
+        //join只能调用一次
+        if (_t.joinable()) {
+            _t.join();
+        }
+    }
+
+    thread_guard(thread_guard const&) = delete;
+    thread_guard& operator=(thread_guard const&) = delete;
+};
+
+void auto_guard() {
+    int some_local_state = 0;
+    func my_func(some_local_state);
+    std::thread  t(my_func);
+    thread_guard g(t);
+    //本线程做一些事情
+    std::cout << "auto guard finished " << std::endl;
+}
 
 int main()
 {
@@ -97,6 +122,9 @@ int main()
 
     //捕获异常
     catch_exception();
+
+    //自动守卫
+    auto_guard();
 
     return 0;
 }
