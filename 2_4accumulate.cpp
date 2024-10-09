@@ -1,16 +1,29 @@
 #include<iostream>
 #include<thread>
 #include<vector>
+#include<numeric>
+
+//借用C++标准库的std::thread::hardware_concurrency()函数，它的返回值是一个指标，
+//表示程序在各次运行中可真正并发的线程数量. 
+//我们可以模拟实现一个并行计算的功能，计算容器内所有元素的和
+template<typename iterator,typename T>
+struct accumulate_block
+{
+    void operator()(iterator first,iterator last, T&result)
+    {
+        result = std::accumulate(first,last,result);
+    }
+};
 
 template<typename Iterator, typename T>
 T parallel_accumulate(Iterator first, Iterator last, T init)
 {
     unsigned long const length = std::distance(first, last);
     if (!length)
-        return init;    //⇽-- - ①
+        return init;    //如果输入为空 就返回
         unsigned long const min_per_thread = 25;
     unsigned long const max_threads =
-        (length + min_per_thread - 1) / min_per_thread;    //⇽-- - ②
+        (length + min_per_thread - 1) / min_per_thread;    //如果范围内的元素多于一个时，需要用范围内元素的总数量除以线程(块)中最小任务数，从而确定启动线程的最大数量
         unsigned long const hardware_threads =
         std::thread::hardware_concurrency();
     unsigned long const num_threads =
