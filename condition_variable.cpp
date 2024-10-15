@@ -13,10 +13,15 @@ void Resonablelmplemention(){
     std::thread t1([](){
         for(;;){
         std::unique_lock<std::mutex> lock(mtx_num);
+        //使用条件变量
         cvA.wait(lock,[](){
             //如果num不等于1就return false线程就挂起，解锁。等待true
             return num == 1;
         });
+        //还可以这样写
+        /* while(num==1){
+            cvA.wait(lock);
+        } */
 
         num++;
         std::cout<<"thread A print 1..."<<std::endl;
