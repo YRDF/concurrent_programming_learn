@@ -25,6 +25,7 @@ void Resonablelmplemention(){
 
         num++;
         std::cout<<"thread A print 1..."<<std::endl;
+        //notify通知线程b
         cvB.notify_one();
         }
     });
