@@ -4,6 +4,7 @@
 #include <atomic>
 #include <condition_variable>
 #include <future>
+#include <functional>
 #include <iostream>
 #include <mutex>
 #include <queue>
@@ -103,3 +104,21 @@ private:
 };
 
 #endif  // !__THREAD_POOL_H__
+
+int main()
+{
+    int m = 0;
+    ThreadPool::instance().commit([](int& m){
+        m = 1024;
+        std::cout<<"inner set m is "<<m<<std::endl;
+        std::cout<<"m addres is "<<&m<<std::endl;
+    },std::ref(m));
+
+    std::this_thread::sleep_for(std::chrono::seconds(3));
+    std::cout<<"m is "<<m<<std::endl;
+    std::cout<<"m addres is "<<&m<<std::endl;
+    
+    std::this_thread::sleep_for(std::chrono::seconds(3));
+
+    return 0;
+}
