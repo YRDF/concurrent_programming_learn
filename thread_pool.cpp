@@ -114,6 +114,13 @@ int main()
         std::cout<<"m addres is "<<&m<<std::endl;
     },std::ref(m));
 
+    int m2 = 10;
+    ThreadPool::instance().commit([](int& m2){
+        m2 = 103;
+        std::cout<<"inner set m2 is "<<m2<<std::endl;
+        std::cout<<"m2 addres is "<<&m2<<std::endl;
+    },std::ref(m2));
+
     std::this_thread::sleep_for(std::chrono::seconds(3));
     std::cout<<"m is "<<m<<std::endl;
     std::cout<<"m addres is "<<&m<<std::endl;
