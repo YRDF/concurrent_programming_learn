@@ -13,7 +13,7 @@
 class ThreadPool  {
 public:
     ThreadPool(const ThreadPool&) = delete;
-    ThreadPool&        operator=(const ThreadPool&) = delete;
+    ThreadPool& operator=(const ThreadPool&) = delete;
 
     static ThreadPool& instance() {
         static ThreadPool ins;
@@ -21,7 +21,6 @@ public:
     }
 
     using Task = std::packaged_task<void()>;
-
 
     ~ThreadPool() {
         stop();
