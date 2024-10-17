@@ -78,7 +78,7 @@ void TestOrderRelaxed() {
     t2.join();
     assert(z.load() != 0); // 5
 }
-
+//宽松内存序
 void TestOderRelaxed2() {
     std::atomic<int> a{ 0 };
     std::vector<int> v3, v4;
@@ -119,6 +119,8 @@ void TestOderRelaxed2() {
         }
         std::cout << std::endl;
 }
+
+
 
 int main()
 {
