@@ -16,7 +16,7 @@ public:
         //调用内部元素的析构函数
         while (_head != _tail) {
             std::allocator<T>::destroy(_data + _head);
-            _head = （_head+1）% _max_size;
+            _head = (_head+1)% _max_size;
         }
         //调用回收操作
         std::allocator<T>::deallocate(_data, _max_size);
