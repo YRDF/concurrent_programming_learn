@@ -57,3 +57,53 @@ void TestOrderSeqCst() {
     t2.join();
     assert(z.load() != 0); // 5
 }
+
+//同步模型Acquire-Release
+void TestReleaseAcquire() {
+    std::atomic<bool> rx, ry;
+
+    std::thread t1([&]() {
+        rx.store(true, std::memory_order_relaxed); // 1
+        ry.store(true, std::memory_order_release); // 2
+        });
+
+
+    std::thread t2([&]() {
+        while (!ry.load(std::memory_order_acquire)); //3
+        assert(rx.load(std::memory_order_relaxed)); //4
+        });
+
+    t1.join();
+    t2.join();
+}
+
+void ReleaseSequence() {
+    std::vector<int> data;
+    std::atomic<int> flag{ 0 };
+
+    std::thread t1([&]() {
+        data.push_back(42);  //(1)
+        flag.store(1, std::memory_order_release); //(2)
+        });
+
+    std::thread t2([&]() {
+        int expected = 1;
+        while (!flag.compare_exchange_strong(expected, 2, std::memory_order_relaxed)) // (3)
+            expected = 1;
+        });
+
+    std::thread t3([&]() {
+        while (flag.load(std::memory_order_acquire) < 2); // (4)
+        assert(data.at(0) == 42); // (5)
+        });
+
+    t1.join();
+    t2.join();
+    t3.join();
+}
+
+int main()
+{
+    //TestOrderSeqCst();
+    return 0;
+}
