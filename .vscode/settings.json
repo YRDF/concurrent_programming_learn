@@ -54,6 +54,7 @@
         "condition_variable": "cpp",
         "mutex": "cpp",
         "future": "cpp",
-        "queue": "cpp"
+        "queue": "cpp",
+        "list": "cpp"
     }
 }
