@@ -64,6 +64,7 @@
         "text_encoding": "cpp",
         "variant": "cpp",
         "map": "cpp",
-        "shared_mutex": "cpp"
+        "shared_mutex": "cpp",
+        "fstream": "cpp"
     }
 }
