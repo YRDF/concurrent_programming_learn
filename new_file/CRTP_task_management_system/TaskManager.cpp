@@ -6,6 +6,74 @@ TaskManager::TaskManager():nextId(1){
     loadTasks();
 }
 
+void TaskManager::addTask(const std::string& description, int priority, const std::string& dueDate){
+    Task task;
+    task.id = nextId++;
+    task.description = description;
+    task.priority = priority;
+    task.dueDate = dueDate;
+    tasks.push_back(task);
+    Logger::getInstance().log("Task added: "+task.toString());
+    saveTasks();
+}
+
+void TaskManager::deleteTask(int id){
+    auto it = std::find_if(tasks.begin(),tasks.end(),[id](const Task& task){
+        return task.id == id;
+    });
+    if(it != tasks.end()){
+        tasks.erase(it);
+        Logger::getInstance().log("Task deleted: "+it->toString());
+        saveTasks();
+    }else{
+        std::cout<<"Task not found."<<std::endl;
+    }
+}
+
+void TaskManager::updateTask(int id,const std::string& description,int priority,const std::string& duDate){
+    auto it = std::find_if(tasks.begin(),tasks.end(),[id](const Task& task){
+        return task.id == id;
+    });
+    if(it != tasks.end()){
+        it->description = description;
+        it->priority = priority;
+        it->dueDate = duDate;
+        Logger::getInstance().log("Task updated: "+it->toString());
+        saveTasks();
+    }else{
+        std::cout<<"Task not found."<<std::endl;
+    }
+}
+
+void TaskManager::saveTasks()const{
+    std::ofstream outFile("log.txt");
+    if(!outFile.is_open()){
+        Logger::getInstance().log("Failed to open tasks file for writing.");
+        return;
+    }
+
+    for(const auto&task :tasks){
+        outFile<<task.id<<","<<task.description<<","<<task.priority<<","<<task.dueDate<<std::endl;
+    }
+    outFile.close();
+    Logger::getInstance().log("Tasks saved successfully.");
+}
+
+void TaskManager::listTasks(int sortOption) const{
+    std::vector<Task> sortedTasks = tasks;
+    switch(sortOption){
+        case 1:
+            std::sort(sortedTasks.begin(),sortedTasks.end(),compareByPriority);
+            break;
+        case 2:
+            std::sort(sortedTasks.begin(),sortedTasks.end(),compareByDueDate);
+            break;
+        default:
+            //不排序
+            break;
+        }
+}
+
 void TaskManager::loadTasks(){
     std::ifstream inFile("log.txt");
     if(!inFile.is_open()){
@@ -29,4 +97,11 @@ void TaskManager::loadTasks(){
     }
     inFile.close();
     Logger::getInstance().log("Tasks loaded successfully.");
+}
+
+bool TaskManager::compareByPriority(const Task& a, const Task& b){
+    return a.priority < b.priority;
+}
+bool TaskManager::compareByDueDate(const Task& a, const Task& b){
+    return a.dueDate < b.dueDate;
 }

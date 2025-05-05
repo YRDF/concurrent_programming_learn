@@ -10,7 +10,7 @@ class TaskManager{
 public:
     TaskManager();
     void addTask(const std::string& description, int priority, const std::string& dueDate);    //添加任务
-    void removeTask(int id);
+    void deleteTask(int id);
     void updateTask(int id,const std::string& description,int priority,const std::string& duDate);
     void listTasks(int sortOption = 0) const; // 0-按ID, 1-按优先级, 2-按截止日期
     void loadTasks();
