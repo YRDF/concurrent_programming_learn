@@ -1,3 +1,5 @@
 2025-05-05 13:52:22: Failed to open tasks file.
 2025-05-05 13:52:22: Task added: ID: 1, 描述: study, 优先级: 1, 截止日期: 2025-05-05
 2025-05-05 13:52:22: Tasks saved successfully.
+2025-05-05 18:59:10: Tasks loaded successfully.
+2025-05-05 18:59:36: 参数格式错误
