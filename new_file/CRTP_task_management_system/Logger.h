@@ -2,7 +2,7 @@
 #include<string>
 #include<mutex>
 #include<fstream>
-
+#pragma once
 class Logger{
 public:
     //获取单例

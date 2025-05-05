@@ -5,7 +5,7 @@
 #include<fstream>
 #include<algorithm>
 #include<sstream>
-
+#pragma once
 class TaskManager{
 public:
     TaskManager();

@@ -2,7 +2,7 @@
 #include<string>
 #include<sstream>
 #include<iomanip>
-
+#pragma once
 class Task{
 public:
     int id;                     //任务id 

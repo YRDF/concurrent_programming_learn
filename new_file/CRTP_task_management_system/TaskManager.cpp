@@ -46,7 +46,7 @@ void TaskManager::updateTask(int id,const std::string& description,int priority,
 }
 
 void TaskManager::saveTasks()const{
-    std::ofstream outFile("log.txt");
+    std::ofstream outFile("task.txt");
     if(!outFile.is_open()){
         Logger::getInstance().log("Failed to open tasks file for writing.");
         return;
@@ -69,13 +69,13 @@ void TaskManager::listTasks(int sortOption) const{
             std::sort(sortedTasks.begin(),sortedTasks.end(),compareByDueDate);
             break;
         default:
-            //不排序
+            //默认排序
             break;
         }
 }
 
 void TaskManager::loadTasks(){
-    std::ifstream inFile("log.txt");
+    std::ifstream inFile("task.txt");
     if(!inFile.is_open()){
         Logger::getInstance().log("Failed to open tasks file.");
         return;
