@@ -72,6 +72,9 @@ void TaskManager::listTasks(int sortOption) const{
             //默认排序
             break;
         }
+    for (const auto& task : sortedTasks) {
+        std::cout << task.toString() << std::endl;
+    }
 }
 
 void TaskManager::loadTasks(){
@@ -80,13 +83,16 @@ void TaskManager::loadTasks(){
         Logger::getInstance().log("Failed to open tasks file.");
         return;
     }
-
+    
     std::string line;
+    //逐行读取文件内容
     while(std::getline(inFile,line)){
+        //将当前行内容转换为字符串流，方便解析
         std::istringstream iss(line);
         Task task;
         char delimiter;
-        iss>>line>>delimiter;
+        // ----------- 解析任务ID -----------
+        iss>>task.id>>delimiter;
         std::getline(iss,task.description,',');
         iss >> task.priority >> delimiter;
         iss >> task.dueDate;

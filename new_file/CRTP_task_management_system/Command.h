@@ -3,13 +3,13 @@
 #include<memory>
 #pragma once
 
-class CommandBase{
-public:
-    virtual void execute(const std::string& args) = 0;
-};
+// class CommandBase{
+// public:
+//     virtual void execute(const std::string& args) = 0;
+// };
 // CRTP
 template<typename Derived>
-class Command:public CommandBase{
+class Command{
 public:
     void execute(const std::string& args){
         (static_cast<Derived*>(this))->executeImpl(args);
@@ -57,10 +57,12 @@ public:
             taskManager.deleteTask(id);
             std::cout << "任务删除成功。" << std::endl;
         }catch(const std::invalid_argument& e){
-            Logger::getInstance().log("参数格式错误");
+            //Logger::getInstance().log("参数格式错误");
+            std::cout << "参数格式错误。请使用: delete <ID>" << std::endl;
             return;
         }catch(const std::out_of_range& e){
-            Logger::getInstance().log("参数格式错误");
+            //Logger::getInstance().log("参数格式错误");
+            std::cout << "参数格式错误。请使用: delete <ID>" << std::endl;
             return;
         }  
     }
@@ -78,16 +80,19 @@ public:
             size_t pos;
             sortOption = std::stoi(args,&pos);
             if(pos != args.length()){
-                Logger::getInstance().log("参数格式错误！");
+                //Logger::getInstance().log("参数格式错误！");
+                std::cout << "参数格式错误。" << std::endl;
                 return;
             }
             std::cout<<"当前任务列表:"<<std::endl;
             taskManager.listTasks(sortOption);
         }catch(const std::invalid_argument& e){
-            Logger::getInstance().log("参数格式错误");
+            //Logger::getInstance().log("参数格式错误");
+            std::cout << "参数格式错误。" << std::endl;
             return;
         }catch(const std::out_of_range& e){
-            Logger::getInstance().log("参数格式错误");
+            //Logger::getInstance().log("参数格式错误");
+            std::cout << "参数格式错误。" << std::endl;
             return;
         }  
     }
